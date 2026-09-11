@@ -5,6 +5,12 @@ export default defineConfig({
   title: "Blog",
   titleTemplate: "自在的博客",
   description: "ZiZai's personal blog. ",
+  // markdown配置
+  markdown: {
+    math: true
+  },
+
+  // 主题配置
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
