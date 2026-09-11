@@ -1,0 +1,29 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "my personal blog. ",
+  "homepage": "https://github.com/simp-co/blog#readme",
+  "bugs": {
+    "url": "https://github.com/simp-co/blog/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simp-co/blog.git"
+  },
+  "license": "ISC",
+  "author": "zizai",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs"
+  },
+  "devDependencies": {
+    "vitepress": "^2.0.0-alpha.20"
+  },
+  "allowScripts": {
+    "fsevents@2.3.3": true
+  }
+}
