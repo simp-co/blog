@@ -15,11 +15,27 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: '首页', link: '/' },
+      { text: 'Groovy', link: '/groovy' },
       { text: '更新', link: '/update-info' },
       { text: '关于我', link: '/about' }
     ],
 
     sidebar: {
+      '/groovy/': [
+        {
+          text: 'Groovy文档',
+          items: [
+            { text: '介绍', link: '/groovy/index' },
+            { text: '数据类型', link: '/groovy/data-types/index' },
+            { text: '操作符', link: '/groovy/operators/index' },
+            { text: '程序结构', link: '/groovy/program-structure/index' },
+            { text: '面向对象', link: '/groovy/object-orientation/index'},
+            { text: '闭包', link: '/groovy/closures/index'},
+            { text: '语义', link: '/groovy/semantics/index'},
+            { text: '与Java的区别', link: '/groovy/differences-with-java/index'}
+          ]
+        }
+      ],
       '/update-info/': [
         {
           text: '更新信息',
