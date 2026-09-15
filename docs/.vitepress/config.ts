@@ -16,6 +16,7 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: 'Groovy', link: '/groovy' },
+      { text: '算法', link: '/algorithm' },
       { text: '更新', link: '/update-info' },
       { text: '关于我', link: '/about' }
     ],
@@ -33,6 +34,16 @@ export default defineConfig({
             { text: '闭包', link: '/groovy/closures/index'},
             { text: '语义', link: '/groovy/semantics/index'},
             { text: '与Java的区别', link: '/groovy/differences-with-java/index'}
+          ]
+        }
+      ],
+      '/algorithm/': [
+        { text: '介绍', link: '/algorithm/index'},
+        {
+          text: '题解',
+          base: '/algorithm/solutions/',
+          items: [
+            { text: '题解部分', link: 'index'}
           ]
         }
       ],
