@@ -43,7 +43,11 @@ export default defineConfig({
           text: '题解',
           base: '/algorithm/solutions/',
           items: [
-            { text: '题解部分', link: 'index'}
+            { text: '题解部分', link: 'index'},
+            { text: '分发糖果', link: 'lc-candy/index'},
+            { text: '填充每个节点的下一个右侧节点指针II', link: 'lc-populating-next-right-pointers-in-each-node-ii/index'},
+            { text: 'x的平方根', link: 'lc-sqrtx/index'},
+            { text: '加油站', link: 'lc-gas-station/index'},
           ]
         }
       ],
