@@ -64,7 +64,7 @@ jobs:
           ssh ${{ secrets.BLOG_USER }}@${{ secrets.BLOG_HOST }} bash -s << EOF
           set -e
           [ -e '$BLOG_ARCHIVE_PATH' ] || mkdir -p '$BLOG_ARCHIVE_PATH'
-          [ -e '$BLOG_LINK_PATH'] && cp -al "\$(readlink -f '$BLOG_LINK_PATH')" '$RELEASE_PATH'
+          [ -e '$BLOG_LINK_PATH' ] && cp -al "\$(readlink -f '$BLOG_LINK_PATH')" '$RELEASE_PATH'
           EOF
       
       - name: Upload Build Artifacts
