@@ -1,0 +1,87 @@
+name: Build And Deploy
+run-name: >-
+  "Build And Deploy(#${{ github.run_number }},"
+  "attempt: ${{ github.run_attempt }},"
+  "id: ${{ github.run_id }}) ->"
+  "caused by actor: ${{ github.actor }},"
+  "sha: ${{ github.sha }}"
+
+on: 
+  push:
+    branches: [main]
+
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install and Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Config known_hosts
+        env:
+          BLOG_HOST_KEYS: ${{ secrets.BLOG_HOST_KEYS }}
+        run: |
+          mkdir -p -m 700 ~/.ssh
+          printf '%s\n' "$BLOG_HOST_KEYS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Setup SSH-Agent
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.BLOG_SSH_KEY }}
+        run: |
+          eval "$(ssh-agent -s)"
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
+          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
+          printf '%s\n' "$SSH_PRIVATE_KEY" | ssh-add -
+
+      - name: Generate Release Relevant Info
+        id: release-info
+        run: |
+          time=$(date +'%Y%m%d_%H%M%S')
+          echo "release_name=${{ github.run_number }}-${{ github.run_attempt }}-$time-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+      
+      - name: Prepare Blog Server Environment
+        env:
+          BLOG_ARCHIVE_PATH: ${{ secrets.BLOG_BASE_PATH }}/${{ secrets.BLOG_ARCHIVE_REL_PATH }}
+          BLOG_LINK_PATH: ${{ secrets.BLOG_BASE_PATH }}/${{ secrets.BLOG_LINK_REL_PATH }}
+          RELEASE_PATH: ${{ secrets.BLOG_BASE_PATH }}/${{ secrets.BLOG_ARCHIVE_REL_PATH }}/${{ steps.release-info.outputs.release_name }}
+        run: |
+          ssh ${{ secrets.BLOG_USER }}@${{ secrets.BLOG_HOST }} bash -s << EOF
+          set -e
+          [ -e '$BLOG_ARCHIVE_PATH' ] || mkdir -p '$BLOG_ARCHIVE_PATH'
+          [ -e '$BLOG_LINK_PATH'] && cp -al "\$(readlink -f '$BLOG_LINK_PATH')" '$RELEASE_PATH'
+          EOF
+      
+      - name: Upload Build Artifacts
+        run: |
+          rsync -avz --delete \
+            docs/.vitepress/dist/ \
+            ${{ secrets.BLOG_USER }}@${{ secrets.BLOG_HOST }}:${{ secrets.BLOG_BASE_PATH }}/${{ secrets.BLOG_ARCHIVE_REL_PATH }}/${{ steps.release-info.outputs.release_name }}/
+
+      - name: Update Link and Delete Outdated Releases
+        env:
+          BLOG_ARCHIVE_PATH: ${{ secrets.BLOG_BASE_PATH }}/${{ secrets.BLOG_ARCHIVE_REL_PATH }}
+          BLOG_LINK_PATH: ${{ secrets.BLOG_BASE_PATH }}/${{ secrets.BLOG_LINK_REL_PATH }}
+          RELEASE_PATH: ${{ secrets.BLOG_BASE_PATH }}/${{ secrets.BLOG_ARCHIVE_REL_PATH }}/${{ steps.release-info.outputs.release_name }}
+        run: |
+          ssh ${{ secrets.BLOG_USER }}@${{ secrets.BLOG_HOST }} bash -s << EOF
+          set -e
+          ln -sfn '$RELEASE_PATH' '$BLOG_LINK_PATH.tmp'
+          mv -Tf '$BLOG_LINK_PATH.tmp' '$BLOG_LINK_PATH'
+          ls -1dt '$BLOG_ARCHIVE_PATH/*' | tail -n +11 | xargs -r rm -rf
+          EOF
