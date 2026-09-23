@@ -7,17 +7,17 @@ lastUpdateDate: 2026-09-12
 
 ## 算数运算符
 
-### `/`
+### `/` {#division-operator}
 
 groovy中没有提供整除的操作符。`/`操作符的返回值为`double`或者`BigDecimal`。如果要进行整除运算，需要使用`intdiv()`函数。
 
-### `**`
+### `**` {#power-operator}
 
 使用`**`进行幂运算。
 
 ## 算数赋值运算符
 
-### `**=`
+### `**=` {#power-assignment-operator}
 
 进行幂运算并赋值。
 
