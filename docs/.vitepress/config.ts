@@ -69,6 +69,11 @@ export default defineConfig({
         },
         link: 'mailto:wy163yx_ya@163.com'
       }
-    ]
+    ],
+
+    outline: {
+      level: [2,3],
+      label: '页面导航'
+    },
   }
 })
