@@ -2,7 +2,7 @@
 createDate: 2026-09-12
 lastUpdateDate: 2026-09-12
 ---
-# 数据类型
+# Groovy-数据类型
 
 ## 字符串
 

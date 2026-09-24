@@ -3,7 +3,7 @@ createDate: 2026-09-14
 lastUpdateDate: 2026-09-14
 ---
 
-# 闭包
+# Groovy-闭包
 
 ## 语法
 
