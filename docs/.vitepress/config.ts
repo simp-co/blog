@@ -67,7 +67,8 @@ export default defineConfig({
         {
           text: '更新信息',
           items: [
-            { text: '介绍', link: '/update-info/index' }
+            { text: '介绍', link: '/update-info/index' },
+            { text: '2026年9月24日', link: '/update-info/2026-09-24/index' },
           ]
         }
       ]
