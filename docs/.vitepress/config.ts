@@ -1,5 +1,8 @@
 import { defineConfig } from 'vitepress'
 
+// 网站的URL
+const APP_URL = "https://blog.zizaispace.com";
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Blog",
@@ -88,5 +91,9 @@ export default defineConfig({
       level: [2,3],
       label: '页面导航'
     },
-  }
+  },
+
+  sitemap: {
+    hostname: APP_URL,
+  },
 })
